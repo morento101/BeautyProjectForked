@@ -6,6 +6,9 @@ files:
     destination: /home/ec2-user/Beauty/
 hooks:
   BeforeInstall:
+    - location: scripts/clean_instance.sh
+      timeout: 1000
+      runas: root
     - location: scripts/install_dependencies.sh
       timeout: 600
       runas: root
