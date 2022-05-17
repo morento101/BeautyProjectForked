@@ -14,6 +14,6 @@ python3.9 manage.py makemigrations
 python3.9 manage.py migrate
 python3.9 manage.py collectstatic --noinput
 
-gunicorn beauty.wsgi:application --bind 0.0.0.0:8000 --daemon
+gunicorn beauty.wsgi:application --bind 0.0.0.0:8000 --workers 4 --daemon
 
 sudo nginx -c /etc/nginx/nginx.conf
