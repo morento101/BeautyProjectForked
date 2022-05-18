@@ -189,7 +189,7 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'TEST_REQUEST_RENDERER_CLASSES': (
             'rest_framework.renderers.MultiPartRenderer',
-            'rest_framework.renderers.JSONRenderer'
+            'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
@@ -198,6 +198,6 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FileUploadParser',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
