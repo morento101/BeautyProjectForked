@@ -1,5 +1,6 @@
 """The module includes serializers for CustomUser model."""
 
+import logging
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
@@ -7,7 +8,8 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from api.models import CustomUser
-import logging
+from beauty.tokens import OrderApprovingTokenGenerator
+from beauty.utils import order_approve_decline_urls
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +49,23 @@ class OrderUserHyperlink(serializers.HyperlinkedRelatedField):
 
         logger.debug(f"User order url: {url} was added to "
                      f"user with id={getattr(obj, self.url_user_id)}")
+        return url
+
+    def to_representation(self, order):
+        """Get order custom data for specialists.
+
+        Args:
+            order (Order): instance Order class
+
+        Returns:
+            data: dict or string for representation
+        """
+        url = super().to_representation(order)
+        request = self.context.get("request")
+        valid_token = OrderApprovingTokenGenerator().check_token(order, order.token)
+        if all([request.user.is_authenticated, request.user == order.specialist, valid_token,
+                self.url_user_id == "specialist_id"]):
+            return {"url": url} | order_approve_decline_urls(order, request=request)
         return url
 
 
@@ -175,6 +194,20 @@ class CustomUserSerializer(PasswordsValidation,
 
         return super().create(validated_data)
 
+    def to_representation(self, instance):
+        """Hide concrete specialist's orders from everybody.
+
+        Args:
+            instance (CustomUser): instance CustomUser class
+
+        Returns:
+            data (dict): data for representation
+        """
+        data = super().to_representation(instance)
+        if not instance.is_specialist or self.context.get("request").user != instance:
+            del data["specialist_orders"]
+        return data
+
 
 class CustomUserDetailSerializer(PasswordsValidation,
                                  serializers.ModelSerializer):
@@ -196,11 +229,15 @@ class CustomUserDetailSerializer(PasswordsValidation,
             "placeholder": "Confirmation Password",
         },
     )
-    specialist_exist_orders = OrderUserHyperlink(many=True, read_only=True)
     customer_exist_orders = OrderUserHyperlink(
         many=True,
         read_only=True,
         url_user_id="customer_id",
+    )
+    customer_reviews = serializers.HyperlinkedRelatedField(
+        many=True,
+        view_name="api:review-detail",
+        read_only=True,
     )
 
     class Meta:
@@ -209,8 +246,8 @@ class CustomUserDetailSerializer(PasswordsValidation,
         model = CustomUser
         fields = ["id", "email", "first_name", "patronymic", "last_name",
                   "phone_number", "bio", "rating", "avatar", "is_active",
-                  "groups", "specialist_exist_orders", "customer_exist_orders",
-                  "password", "confirm_password"]
+                  "groups", "customer_exist_orders", "password",
+                  "confirm_password", "customer_reviews"]
 
     def update(self, instance: object, validated_data: dict) -> object:
         """Update user information using dict with data.
@@ -233,6 +270,52 @@ class CustomUserDetailSerializer(PasswordsValidation,
         logger.info(f"Data for user {instance} was updated")
 
         return super().update(instance, validated_data)
+
+
+class SpecialistInformationSerializer(CustomUserDetailSerializer):
+    """Class for serializing specialist's information for specialist."""
+
+    specialist_exist_orders = OrderUserHyperlink(many=True, read_only=True)
+    specialist_reviews = serializers.HyperlinkedRelatedField(
+        many=True,
+        view_name="api:review-detail",
+        read_only=True,
+    )
+
+    class Meta(CustomUserDetailSerializer.Meta):
+        """Meta class for SpecialistInformationdSerializer."""
+
+        fields = CustomUserDetailSerializer.Meta.fields + ["specialist_exist_orders",
+                                                           "specialist_reviews"]
+
+
+class SpecialistDetailSerializer(serializers.ModelSerializer):
+    """Class for serializing specialist's information for customer."""
+
+    specialist_reviews = serializers.HyperlinkedRelatedField(
+        many=True,
+        view_name="api:review-detail",
+        read_only=True,
+    )
+    make_order = serializers.URLField(
+        default="",
+    )
+
+    class Meta:
+        """Meta class for SpecialistDetailSerializer."""
+
+        model = CustomUser
+        fields = ["id", "first_name", "patronymic", "last_name", "bio",
+                  "rating", "avatar", "specialist_reviews", "make_order"]
+
+    def to_representation(self, instance):
+        """Method for representing an URL for making an order."""
+        data = super().to_representation(instance)
+        data["make_order"] = reverse("api:order-list-create", request=self.context.get("request"))
+
+        logger.info(f"Data to display for specialist {instance} was updated")
+
+        return data
 
 
 class ResetPasswordSerializer(PasswordsValidation):

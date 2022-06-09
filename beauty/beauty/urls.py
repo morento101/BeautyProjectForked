@@ -19,24 +19,37 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.routers import DefaultRouter
 from beauty.yasg import urlpatterns as doc_urls
 
-from api.views import UserActivationView, ResetPasswordView
+from api.views_api import (ResetPasswordView, UserActivationView, UserViewSet)
+
+from social_login.views import GoogleLogin
 
 
 @api_view(["GET"])
 def api_root(request, reverse_format=None):
-    """Gives list of all list links."""
-    return Response(
-        {"users": reverse("api:user-list-create", request=request,
-                          format=reverse_format),
-         "orders": reverse("api:order-list-create", request=request,
-                           format=reverse_format)},
+    """Add links of all lists to API Home page."""
+    return Response({
+        "users": reverse(
+            "api:user-list-create",
+            request=request,
+            format=reverse_format,
+        ),
+        "orders": reverse(
+            "api:order-list-create",
+            request=request,
+            format=reverse_format,
+        )},
     )
 
+
+router = DefaultRouter()
+router.register("auth/users", UserViewSet)
 
 urlpatterns = [
     path("", api_root),
@@ -52,15 +65,12 @@ urlpatterns = [
         name="reset-password",
     ),
     path("api/v1/", include("api.urls", namespace="api")),
-    # path(
-    #    "api-auth/",
-    # include("rest_framework.urls", namespace="rest_framework")
-    # ),
-    path(r"auth/", include("djoser.urls")),
     path(r"auth/", include("djoser.urls.jwt")),
-
+    path("authorize/", include("dj_rest_auth.urls")),
+    path("social-login/google/", GoogleLogin.as_view(), name="google_login"),
 ]
 
+urlpatterns += router.urls
 urlpatterns += doc_urls
 
 if settings.DEBUG:
