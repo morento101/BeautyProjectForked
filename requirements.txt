@@ -1,4 +1,4 @@
-﻿alabaster==0.7.12
+alabaster==0.7.12
 amqp==5.1.1
 aniso8601==9.0.1
 asgiref==3.5.0
@@ -22,17 +22,15 @@ coreschema==0.0.4
 coverage==6.4
 cryptography==37.0.2
 cycler==0.11.0
-defusedxml==0.7.1
+defusedxml
 Deprecated==1.2.13
 dill==0.3.5.1
 distlib==0.3.4
 dj-database-url==0.5.0
 dj-rest-auth==2.2.4
-Django==4.0.4
+Django
 django-address==0.2.8
 django-allauth==0.50.0
-django-authentication
-django-braces==1.15.0
 django-cors-headers==3.12.0
 django-cors-middleware==1.5.0
 django-database-view==0.3.0
@@ -45,7 +43,6 @@ django-rest-swagger==2.2.0
 django-social-auth==0.7.28
 django-templated-mail==1.1.1
 djangorestframework==3.13.1
-djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
 docopt==0.6.2
 docutils==0.17.1
@@ -83,6 +80,7 @@ httplib2==0.20.4
 identify==2.5.1
 idna==3.3
 imagesize==1.3.0
+import-order==0.0.11
 importlib-metadata==4.11.3
 inflection==0.5.1
 isodate==0.6.1
@@ -127,6 +125,7 @@ pycodestyle==2.8.0
 pycparser==2.21
 pydocstyle==6.1.1
 pyflakes==2.4.0
+Pygments
 PyJWT==2.3.0
 PyMySQL==1.0.2
 pyOpenSSL==22.0.0
