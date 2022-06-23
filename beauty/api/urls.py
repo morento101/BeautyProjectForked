@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from api.views.order_views import (CustomerOrdersViews, OrderApprovingView,
+from api.views.order_views import (CustomerOrdersViews, OrderApprovingView, SpecialistOrdersViews,
                                    OrderCreateView, OrderRetrieveCancelView)
 
 from api.views.review_views import (ReviewDisplayView,
@@ -18,7 +18,9 @@ from .views_api import (AllServicesListCreateView, BusinessesListCreateAPIView,
                         BusinessDetailRUDView, CustomUserDetailRUDView,
                         CustomUserListCreateView, PositionListCreateView, SpecialistDetailView,
                         ServiceUpdateView, PositionRetrieveUpdateDestroyView,
-                        RemoveSpecialistFromPosition)
+                        RemoveSpecialistFromPosition, BusinessServicesView, SpecialistsServicesView)
+
+
 
 app_name = "api"
 
@@ -47,6 +49,11 @@ urlpatterns = [
         "customer/<int:pk>/orders/",
         CustomerOrdersViews.as_view(),
         name="customer-orders-list",
+    ),
+    path(
+        "specialist/<int:pk>/orders/",
+        SpecialistOrdersViews.as_view(),
+        name="specialist-orders-list",
     ),
     path(
         "orders/",
@@ -126,4 +133,14 @@ urlpatterns = [
     path("service/<int:pk>/",
          ServiceUpdateView.as_view(),
          name="service-detail"),
+
+    path(
+        "business/<int:pk>/services/",
+        BusinessServicesView.as_view(),
+        name="service-by-business"),
+
+    path(
+        "specialist/<int:pk>/services/",
+        SpecialistsServicesView.as_view(),
+        name="service-by-specialist"),
 ]
