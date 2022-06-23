@@ -132,7 +132,7 @@ def validate_rounded_minutes_seconds(time_value):
         if isinstance(time_value, datetime):
             time_value = time_value.time()
 
-        if time_value.minute % 5 and time_value.second != 0:
+        if time_value.minute % 5 or time_value.second != 0:
             raise ValidationError(
                 "Time value must have zero seconds and minutes multiples of 5",
                 params={"value": time_value},
