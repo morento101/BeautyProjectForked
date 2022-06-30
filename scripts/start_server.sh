@@ -19,3 +19,5 @@ sudo chmod -R 777 /home/ec2-user/Beauty
 gunicorn beauty.wsgi:application --bind 0.0.0.0:8000 --workers 4 --daemon
 
 sudo nginx -c /etc/nginx/nginx.conf
+
+celery -A beauty worker -l INFO
