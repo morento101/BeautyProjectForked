@@ -8,4 +8,4 @@ yum install -y gcc-c++ flex epel-release nginx supervisor
 
 sudo amazon-linux-extras install nginx1
 
-yum install redis
+sudo yum install redis
