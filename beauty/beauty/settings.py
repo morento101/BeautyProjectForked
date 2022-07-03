@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework.authtoken",
     "phonenumber_field",
-    "address",
     "drf_yasg",
     "corsheaders",
     "django.contrib.sites",
@@ -133,7 +132,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=20),
     "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
 }
 
@@ -342,7 +341,7 @@ except ImportError:
 # CELERY STUFF
 BROKER_URL = config("BROKER_URL")
 CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
-CELERY_ACCEPT_CONTENT = config("CELERY_ACCEPT_CONTENT", cast=Csv())
-CELERY_TASK_SERIALIZER = config("CELERY_TASK_SERIALIZER")
-CELERY_RESULT_SERIALIZER = config("CELERY_RESULT_SERIALIZER")
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
