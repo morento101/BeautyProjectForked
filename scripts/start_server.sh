@@ -20,4 +20,6 @@ gunicorn beauty.wsgi:application --bind 0.0.0.0:8000 --workers 4 --daemon
 
 sudo nginx -c /etc/nginx/nginx.conf
 
+sudo systemctl start redis
+
 celery -A beauty worker -l INFO
