@@ -22,4 +22,4 @@ sudo nginx -c /etc/nginx/nginx.conf
 
 sudo systemctl start redis
 
-celery -A beauty worker -l INFO
+celery -A beauty worker -l INFO --detach
