@@ -22,4 +22,4 @@ sudo nginx -c /etc/nginx/nginx.conf
 
 sudo systemctl start redis
 
-celery -A beauty worker -l INFO --detach
+supervisord -c /home/ec2-user/Beauty/supervisord.conf
