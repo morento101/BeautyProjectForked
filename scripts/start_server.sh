@@ -20,6 +20,4 @@ gunicorn beauty.wsgi:application --bind 0.0.0.0:8000 --workers 4 --daemon
 
 sudo nginx -c /etc/nginx/nginx.conf
 
-sudo systemctl start redis
-
 supervisord -c /home/ec2-user/Beauty/supervisord.conf
