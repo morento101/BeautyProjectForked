@@ -218,7 +218,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "media/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+MEDIA_ROOT = os.path.join("home", "ec2-user", "Beauty", BASE_DIR, "mediafiles")
 
 FIXTURE_DIRS = "fixtures/"
 
