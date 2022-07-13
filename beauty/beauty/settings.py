@@ -309,7 +309,7 @@ LOGGING = {
             "mode": "a",
             "maxBytes": 15728640,  # 1024 * 1024 * 15B = 15MB
             "backupCount": 10,
-            "filename": "beauty/logs/info.log",
+            "filename": "logs/info.log",
             "formatter": "verbose",
         },
         "mail_admins": {
