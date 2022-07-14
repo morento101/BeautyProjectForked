@@ -2,8 +2,6 @@
 
 cd /home/ec2-user/Beauty
 
-supervisorctl -u user -p 123 shutdown
-
 python3.9 -m venv venv
 
 source venv/bin/activate
@@ -11,6 +9,8 @@ source venv/bin/activate
 pip3.9 install -r requirements.txt
 
 cd beauty
+
+supervisorctl -u user -p 123 shutdown
 
 python3.9 manage.py makemigrations
 python3.9 manage.py migrate
