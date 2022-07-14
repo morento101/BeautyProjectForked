@@ -2,11 +2,11 @@
 
 cd /home/ec2-user/Beauty
 
+supervisorctl -u user -p 123 shutdown
+
 python3.9 -m venv venv
 
 source venv/bin/activate
-
-supervisorctl -u user -p 123 shutdown
 
 pip3.9 install -r requirements.txt
 
