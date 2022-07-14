@@ -8,6 +8,8 @@ source venv/bin/activate
 
 pip3.9 install -r requirements.txt
 
+supervisorctl -u user -p 123 shutdown
+
 cd beauty
 
 python3.9 manage.py makemigrations
@@ -19,7 +21,5 @@ sudo chmod -R 777 /home/ec2-user/Beauty
 gunicorn beauty.wsgi:application --bind 0.0.0.0:8000 --workers 4 --daemon
 
 sudo nginx -c /etc/nginx/nginx.conf
-
-supervisorctl -u user -p 123 shutdown
 
 supervisord -c /home/ec2-user/Beauty/supervisord.conf
