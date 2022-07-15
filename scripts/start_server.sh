@@ -10,8 +10,6 @@ pip3.9 install -r requirements.txt
 
 cd beauty
 
-#supervisorctl -u user -p 123 shutdown
-
 python3.9 manage.py makemigrations
 python3.9 manage.py migrate
 python3.9 manage.py collectstatic --noinput
