@@ -1,6 +1,6 @@
 #!/bin/bash
 
-supervisorctl -u user -p 123 shutdown
+if [ -e  /tmp/supervisord.pid ]; then sudo kill -9 $(cat /tmp/supervisord.pid); fi
 
 if [ -e /var/run/nginx.pid ]; then sudo nginx -s stop; fi
 
