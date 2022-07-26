@@ -54,7 +54,33 @@ admin.site.register(Group, CustomGroupAdmin)
 admin.site.register(Order)
 admin.site.register(Service)
 admin.site.register(Position)
-admin.site.register(Business)
+
+
+class BusinessAdmin(admin.ModelAdmin):
+    search_fields = ("name", "owner", "type")
+
+    list_display = ("name", "owner", "business_type")
+    list_filter = ("is_active",)
+    ordering = ("name",)
+
+    fieldsets = (
+        ("Required", {
+            "fields": (
+                ("name", "business_type"),
+                "owner",
+                "description",
+            ),
+        }),
+        ("Additional", {
+            "fields": (
+                ("logo", "location",),
+                ("working_time", "is_active"),
+            )
+        })
+    )
+
+
+admin.site.register(Business, BusinessAdmin)
 admin.site.register(Review)
 admin.site.register(Invitation)
 admin.site.register(Location)
